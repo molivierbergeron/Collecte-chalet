@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a1c19">
+<title>Quel bac</title>
+<style>
+  :root{
+    --ordures:#2c3327;
+    --recyclage:#0b5c9e;
+    --compost:#6d4526;
+    --void:#8f918a;
+    --ink:#f4f3ee;
+    --display:"Avenir Next Condensed","Helvetica Neue Condensed",
+              "HelveticaNeue-CondensedBold",-apple-system,
+              "Segoe UI",Roboto,sans-serif;
+    --util:ui-monospace,Menlo,"SF Mono",Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:#1a1c19;color:var(--ink);
+    font-family:var(--display);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  #app{
+    min-height:100svh;display:flex;flex-direction:column;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right)
+            env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  /* ---- eyebrow ---- */
+  .today{
+    font-family:var(--util);font-size:.72rem;letter-spacing:.14em;
+    text-transform:uppercase;opacity:.55;
+    padding:1.1rem 1.25rem .9rem;flex:0 0 auto;
+  }
+
+  /* ---- the bands: one per bin, stacked like bins at the curb ---- */
+  .bands{flex:1 1 auto;display:flex;flex-direction:column}
+  .band{
+    flex:1 1 0;min-height:26vh;position:relative;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:1.4rem 1.25rem;
+    transform-origin:left center;
+  }
+  .band[data-kind="ordures"]{background:var(--ordures)}
+  .band[data-kind="recyclage"]{background:var(--recyclage)}
+  .band[data-kind="compost"]{background:var(--compost)}
+  .band[data-kind="void"]{background:var(--void);color:#22241f}
+
+  .matiere{
+    font-family:var(--util);font-size:.7rem;letter-spacing:.2em;
+    text-transform:uppercase;opacity:.7;margin-bottom:.35rem;
+  }
+  .bac{
+    font-size:clamp(2.9rem,13.5vw,6.5rem);
+    font-weight:700;line-height:.86;letter-spacing:-.015em;
+    text-transform:uppercase;
+  }
+  .quand{
+    font-family:var(--util);font-size:.82rem;letter-spacing:.04em;
+    margin-top:.7rem;opacity:.85;
+  }
+  .quand b{font-weight:600}
+  .imminent{
+    display:inline-block;margin-left:.5rem;padding:.12rem .45rem;
+    border:1px solid currentColor;border-radius:2px;
+    font-size:.68rem;letter-spacing:.1em;opacity:.9;
+  }
+
+  /* ---- footer: the schedule ahead ---- */
+  .suite{
+    flex:0 0 auto;background:#1a1c19;
+    padding:1.1rem 1.25rem calc(1.3rem + env(safe-area-inset-bottom));
+  }
+  .suite h2{
+    font-family:var(--util);font-size:.66rem;letter-spacing:.18em;
+    text-transform:uppercase;opacity:.45;font-weight:400;margin-bottom:.7rem;
+  }
+  .suite ul{list-style:none;display:flex;flex-direction:column;gap:.42rem}
+  .suite li{
+    display:flex;align-items:baseline;gap:.6rem;
+    font-family:var(--util);font-size:.8rem;
+  }
+  .dot{
+    width:.62rem;height:.62rem;border-radius:1px;flex:0 0 auto;
+    transform:translateY(.02rem);
+  }
+  .dot.ordures{background:#7c9668}
+  .dot.recyclage{background:#4a9fdc}
+  .dot.compost{background:#b5804f}
+  .suite .d{opacity:.9}
+  .suite .m{opacity:.5;margin-left:auto;font-size:.72rem}
+
+  .stale{
+    background:#7a2318;color:#fff;font-family:var(--util);
+    font-size:.75rem;line-height:1.5;padding:.9rem 1.25rem;
+  }
+
+  @media (prefers-reduced-motion:no-preference){
+    .band{animation:wipe .5s cubic-bezier(.2,.7,.2,1) backwards}
+    .band:nth-child(2){animation-delay:.07s}
+    .band:nth-child(3){animation-delay:.14s}
+    @keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+  }
+  @media (min-width:700px){
+    .bands{flex-direction:row}
+    .band{min-height:auto}
+    .bac{font-size:clamp(2.4rem,5.2vw,4.4rem)}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="today" id="today"></div>
+  <div class="bands" id="bands"></div>
+  <div class="suite">
+    <h2>Ensuite</h2>
+    <ul id="suite"></ul>
+  </div>
+</div>
+
+<script>
+/* Calendrier 2026 — Ville de Saint-Gabriel.
+   Relevé depuis le PDF officiel des collectes.
+   Ordures: lundi, aux 2 semaines. Compost: lundi, hebdo l'été.
+   Recyclage: vendredi, aux 2 semaines. */
+const CAL = {
+  ordures:  "01-05,01-19,02-02,02-16,03-02,03-16,03-30,04-13,04-27,05-11,05-25,06-08,06-22,07-06,07-20,08-03,08-17,08-31,09-14,09-28,10-12,10-26,11-09,11-23,12-07,12-21",
+  recyclage:"01-02,01-16,01-30,02-13,02-27,03-13,03-27,04-10,04-24,05-08,05-22,06-05,06-19,07-03,07-17,07-31,08-14,08-28,09-11,09-25,10-09,10-23,11-06,11-20,12-04,12-18",
+  compost:  "01-05,01-19,02-02,02-16,03-02,03-16,03-30,04-06,04-13,04-20,04-27,05-04,05-11,05-18,05-25,06-01,06-08,06-15,06-22,06-29,07-06,07-13,07-20,07-27,08-03,08-10,08-17,08-24,08-31,09-07,09-14,09-21,09-28,10-05,10-12,10-19,10-26,11-09,11-23,12-07,12-21"
+};
+const ANNEE = 2026;
+const FENETRE = 7;                       // jours d'avance couverts
+const BAC = {ordures:"Bac noir",recyclage:"Bac bleu",compost:"Bac brun"};
+const JOURS = ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
+const MOIS = ["janvier","février","mars","avril","mai","juin","juillet",
+              "août","septembre","octobre","novembre","décembre"];
+
+const minuit = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const jourEcart = (a,b) => Math.round((minuit(b)-minuit(a))/864e5);
+const longue = d => `${JOURS[d.getDay()]} ${d.getDate()} ${MOIS[d.getMonth()]}`;
+const courte = d => `${JOURS[d.getDay()].slice(0,3)} ${d.getDate()} ${MOIS[d.getMonth()].slice(0,4)}`;
+
+function collectes(){
+  const out = [];
+  for (const [matiere, liste] of Object.entries(CAL))
+    for (const md of liste.split(",")){
+      const [m,j] = md.split("-").map(Number);
+      out.push({matiere, date:new Date(ANNEE, m-1, j)});
+    }
+  return out.sort((a,b) => a.date - b.date);
+}
+
+function delai(n){
+  if (n === 0) return "aujourd'hui";
+  if (n === 1) return "demain";
+  return `dans ${n} jours`;
+}
+
+function rendre(){
+  const auj = minuit(new Date());
+  const tout = collectes();
+
+  document.getElementById("today").textContent =
+    `${longue(auj)} ${ANNEE}`;
+
+  // Calendrier épuisé
+  if (auj.getFullYear() !== ANNEE){
+    document.body.insertAdjacentHTML("afterbegin",
+      `<div class="stale">Cette page ne contient que le calendrier ${ANNEE}.
+       Récupère le nouveau PDF sur ville.stgabriel.qc.ca et remplace les
+       trois listes dans le fichier.</div>`);
+  }
+
+  const aSortir = tout.filter(c => {
+    const n = jourEcart(auj, c.date);
+    return n >= 0 && n <= FENETRE;
+  });
+
+  // Regrouper par matière, en gardant la plus proche
+  const parMatiere = [];
+  for (const c of aSortir)
+    if (!parMatiere.some(x => x.matiere === c.matiere)) parMatiere.push(c);
+
+  const bands = document.getElementById("bands");
+
+  if (parMatiere.length === 0){
+    const suivante = tout.find(c => jourEcart(auj, c.date) > 0);
+    bands.innerHTML = `
+      <div class="band" data-kind="void">
+        <div class="matiere">Rien à sortir</div>
+        <div class="bac">Rentre<br>les bacs</div>
+        <div class="quand">${suivante
+          ? `Prochaine collecte : <b>${longue(suivante.date)}</b>, ${BAC[suivante.matiere].toLowerCase()}`
+          : `Aucune collecte d'ici la fin de l'année`}</div>
+      </div>`;
+  } else {
+    bands.innerHTML = parMatiere.map(c => {
+      const n = jourEcart(auj, c.date);
+      const chaud = n <= 1 ? `<span class="imminent">au chemin ce soir</span>` : "";
+      return `
+        <div class="band" data-kind="${c.matiere}">
+          <div class="matiere">${c.matiere}</div>
+          <div class="bac">${BAC[c.matiere]}</div>
+          <div class="quand"><b>${longue(c.date)}</b> · ${delai(n)}${chaud}</div>
+        </div>`;
+    }).join("");
+  }
+
+  // La suite
+  const suite = tout.filter(c => jourEcart(auj, c.date) > 0).slice(0, 6);
+  document.getElementById("suite").innerHTML = suite.map(c => {
+    const n = jourEcart(auj, c.date);
+    return `<li><span class="dot ${c.matiere}"></span>
+      <span class="d">${courte(c.date)}</span>
+      <span>${BAC[c.matiere].toLowerCase()}</span>
+      <span class="m">${n} j</span></li>`;
+  }).join("");
+}
+
+rendre();
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) location.reload();
+});
+</script>
+</body>
+</html>
