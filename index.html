@@ -171,7 +171,7 @@ function rendre(){
     `${longue(auj)} ${ANNEE}`;
 
   // Calendrier épuisé
-  if (auj.getFullYear() !== ANNEE){
+  if (auj.getFullYear() !== ANNEE && !document.querySelector(".stale")){
     document.body.insertAdjacentHTML("afterbegin",
       `<div class="stale">Cette page ne contient que le calendrier ${ANNEE}.
        Récupère le nouveau PDF sur ville.stgabriel.qc.ca et remplace les
@@ -226,7 +226,7 @@ function rendre(){
 
 rendre();
 document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) location.reload();
+  if (!document.hidden) rendre();   // pas reload(): fonctionne sans réseau
 });
 </script>
 </body>
