@@ -161,7 +161,6 @@ function collectes(){
 }
 
 function delai(n){
-  if (n === 0) return "aujourd'hui";
   if (n === 1) return "demain";
   return `dans ${n} jours`;
 }
@@ -183,7 +182,7 @@ function rendre(){
 
   const aSortir = tout.filter(c => {
     const n = jourEcart(auj, c.date);
-    return n >= 0 && n <= FENETRE;
+    return n >= 1 && n <= FENETRE;   // pas le jour meme: le camion est deja passe
   });
 
   // Regrouper par matière, en gardant la plus proche
@@ -206,7 +205,7 @@ function rendre(){
   } else {
     bands.innerHTML = parMatiere.map(c => {
       const n = jourEcart(auj, c.date);
-      const chaud = n <= 1 ? `<span class="imminent">au chemin ce soir</span>` : "";
+      const chaud = n === 1 ? `<span class="imminent">au chemin ce soir</span>` : "";
       return `
         <div class="band" data-kind="${c.matiere}">
           <div class="matiere">${c.matiere}</div>
