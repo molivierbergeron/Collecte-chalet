@@ -1,0 +1,454 @@
+{
+ "schema": 4,
+ "id": "collecte",
+ "repo": "Collecte-chalet",
+ "name": "Bacs de collecte",
+ "one_liner": "Dit quel bac sortir au chalet ce soir, sans ouvrir le PDF de la Ville.",
+ "status": "actif",
+ "version": "Calendrier 2026",
+ "posture": {
+  "verdict": "Entretenir avant décembre",
+  "why": "Le produit fait une seule chose et la fait bien. Son seul vrai risque : le calendrier s'arrête le 21 décembre et la page ne prévient pas."
+ },
+ "doing": "Rien en cours. Trois petites corrections sont à faire avant le 1er décembre.",
+ "headline": "Fonctionne. Le calendrier 2026 s'arrête le 21 décembre ; sans correction, la page affichera « aucune collecte » sans prévenir, puis une date de 2026 en janvier.",
+ "resume": [
+  "Une page, aucun serveur : rien ne tourne en arrière-plan.",
+  "Les dates viennent du PDF de la Ville de Saint-Gabriel (ville.stgabriel.qc.ca).",
+  "Chaque décembre : donner le nouveau PDF à l'IA, qui entre les dates en 15 minutes."
+ ],
+ "links": [
+  {
+   "label": "Ouvrir Quel bac ?",
+   "url": "https://molivierbergeron.github.io/Collecte-chalet/",
+   "kind": "app"
+  },
+  {
+   "label": "Statistiques de visite",
+   "url": "https://mobergeron.goatcounter.com/",
+   "kind": "stats"
+  },
+  {
+   "label": "Code sur GitHub",
+   "url": "https://github.com/molivierbergeron/Collecte-chalet",
+   "kind": "code"
+  }
+ ],
+ "phases": [
+  {
+   "id": "idee",
+   "name": "Idée",
+   "goal": "Ne plus ouvrir le PDF pour savoir quel bac sortir.",
+   "exit": "—",
+   "status": "fait",
+   "done_on": "2026-07-25"
+  },
+  {
+   "id": "poc",
+   "name": "Preuve de concept",
+   "goal": "Entrer les 93 dates et afficher la prochaine collecte.",
+   "exit": "Bonne réponse sur une semaine test.",
+   "status": "fait",
+   "done_on": "2026-07-25"
+  },
+  {
+   "id": "proto",
+   "name": "Prototype",
+   "goal": "Lisible à bout de bras, installable sur l'iPhone.",
+   "exit": "Installée.",
+   "status": "fait",
+   "done_on": "2026-07-26"
+  },
+  {
+   "id": "lancement",
+   "name": "Lancement",
+   "goal": "S'en servir chaque semaine au chalet.",
+   "exit": "Utilisée.",
+   "status": "fait",
+   "done_on": "2026-07-31"
+  },
+  {
+   "id": "amelioration",
+   "name": "Amélioration",
+   "goal": "Passer l'année sans mentir.",
+   "exit": "Avertissement dès le 1er décembre ; calendrier 2027 entré.",
+   "status": "en cours",
+   "note": "Échéance : 1er décembre."
+  },
+  {
+   "id": "maturite",
+   "name": "Maturité",
+   "goal": "Rappeler la veille.",
+   "exit": "—",
+   "status": "à venir"
+  }
+ ],
+ "objectives": [
+  {
+   "id": "O1",
+   "title": "Ne jamais afficher une information fausse",
+   "why": "Le pire scénario : un écran qui dit « rien à sortir » alors que c'est faux, et le bac reste au garage.",
+   "benefit": "fiabilite",
+   "measure": "Réponse juste en tout temps",
+   "now": "Muet du 22 au 31 décembre ; année fausse en janvier ; plantage invisible",
+   "target": "Avertissement dès le 1er décembre, erreurs visibles",
+   "strategies": [
+    {
+     "id": "O1.S1",
+     "title": "Corriger les trois pannes silencieuses",
+     "why": "Trois corrections de quelques lignes, une seule session.",
+     "state": "active",
+     "initiatives": [
+      {
+       "id": "c-annee",
+       "title": "Afficher l'année réelle",
+       "status": "à faire",
+       "owner": "ia",
+       "benefit": "fiabilite",
+       "phase": "amelioration",
+       "effort": "XS",
+       "package": "c-p-decembre"
+      },
+      {
+       "id": "c-alerte",
+       "title": "Avertir dès le 1er décembre que le calendrier finit",
+       "status": "à faire",
+       "owner": "ia",
+       "benefit": "fiabilite",
+       "phase": "amelioration",
+       "effort": "XS",
+       "due": "2026-12-01",
+       "package": "c-p-decembre"
+      },
+      {
+       "id": "c-plantage",
+       "title": "Afficher un message si la page plante",
+       "status": "à faire",
+       "owner": "ia",
+       "benefit": "fiabilite",
+       "phase": "amelioration",
+       "effort": "XS",
+       "package": "c-p-decembre"
+      }
+     ]
+    },
+    {
+     "id": "O1.S2",
+     "title": "Entrer le calendrier 2027",
+     "why": "Plus simple et plus sûr que de deviner une règle : l'IA transcrit le PDF en 15 minutes chaque année.",
+     "state": "à venir",
+     "initiatives": [
+      {
+       "id": "c-2027",
+       "title": "Récupérer le PDF 2027 de la Ville",
+       "status": "à faire",
+       "owner": "externe",
+       "benefit": "fiabilite",
+       "phase": "amelioration",
+       "effort": "XS",
+       "minutes": 5,
+       "due": "2026-12-15",
+       "detail": "Dès qu'il est publié sur ville.stgabriel.qc.ca."
+      },
+      {
+       "id": "c-transcrire",
+       "title": "Entrer les dates 2027 depuis le PDF",
+       "status": "bloqué",
+       "owner": "ia",
+       "benefit": "fiabilite",
+       "phase": "amelioration",
+       "effort": "XS",
+       "blocked_by": "c-2027"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "O2",
+   "title": "Ne plus avoir à y penser",
+   "why": "La page aide seulement si on pense à l'ouvrir ; un rappel la veille change sa nature.",
+   "benefit": "experience",
+   "measure": "Bac sorti à temps sans ouvrir la page",
+   "now": "Il faut penser à ouvrir la page",
+   "target": "Rappel la veille à 19 h",
+   "strategies": [
+    {
+     "id": "O2.S1",
+     "title": "Un rappel dans le calendrier du téléphone",
+     "why": "Un fichier calendrier généré avec les dates ; le téléphone fait le rappel, sans serveur.",
+     "state": "à venir",
+     "initiatives": [
+      {
+       "id": "c-ics",
+       "title": "Abonnement calendrier avec rappel la veille",
+       "status": "plus tard",
+       "owner": "ia",
+       "benefit": "experience",
+       "phase": "maturite",
+       "effort": "M",
+       "blocked_by": "dec:c-rappel"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "decisions": [
+  {
+   "id": "dec:c-rappel",
+   "question": "Veux-tu un rappel la veille dans ton calendrier ?",
+   "stakes": "Change le produit : il te prévient au lieu d'attendre que tu l'ouvres.",
+   "options": [
+    "Oui",
+    "Non, la page suffit"
+   ],
+   "recommendation": "Oui, à faire en même temps que le calendrier 2027 : un seul passage de l'IA.",
+   "minutes": 1,
+   "unblocks": [
+    "c-ics"
+   ]
+  }
+ ],
+ "packages": [
+  {
+   "id": "c-p-decembre",
+   "title": "Préparer la fin d'année",
+   "outcome": "Année juste, avertissement dès le 1er décembre, erreur visible si la page plante.",
+   "ai_minutes": 30,
+   "review_minutes": 5,
+   "prompt": "Dans le repo Collecte-chalet, dans index.html : (1) afficher l'année de l'horloge au lieu de la constante ANNEE dans le bandeau ; (2) avertir dès le 1er décembre que le calendrier arrive à sa fin (« bientôt épuisé », puis « périmé ») ; (3) envelopper le rendu dans un try/catch qui affiche l'erreur. Teste avec l'horloge au 2026-12-02 et au 2027-01-04. Ajoute un README qui dit d'où viennent les dates.",
+   "items": [
+    "c-annee",
+    "c-alerte",
+    "c-plantage"
+   ],
+   "when": "Avant le 1er décembre"
+  }
+ ],
+ "opportunities": [
+  {
+   "title": "Corriger les 3 pannes silencieuses",
+   "value": 3,
+   "effort": "XS",
+   "context": "Avant le 1er décembre",
+   "verdict": "Maintenant",
+   "why": "Évite que la page mente en décembre.",
+   "benefit": "fiabilite"
+  },
+  {
+   "title": "Rappel la veille dans le calendrier",
+   "value": 3,
+   "effort": "M",
+   "context": "Avec le calendrier 2027",
+   "verdict": "À décider",
+   "why": "Le vrai problème est d'oublier le bac, pas de lire la page.",
+   "benefit": "experience"
+  },
+  {
+   "title": "Calculer les dates par une règle",
+   "value": 1,
+   "effort": "L",
+   "context": "—",
+   "verdict": "Non",
+   "why": "4 sessions et un risque d'erreur, pour éviter 15 minutes de transcription par an.",
+   "benefit": "fiabilite"
+  },
+  {
+   "title": "Ouvrir sans réseau",
+   "value": 1,
+   "effort": "L",
+   "context": "—",
+   "verdict": "Non",
+   "why": "Gros chantier pour un cas rare (pas de signal et app fermée).",
+   "benefit": "experience"
+  },
+  {
+   "title": "Compter les ouvertures sur l'appareil",
+   "value": 1,
+   "effort": "S",
+   "context": "—",
+   "verdict": "Non",
+   "why": "GoatCounter compte déjà les visites depuis le 5 septembre.",
+   "benefit": "usage"
+  }
+ ],
+ "next": {
+  "type": "package",
+  "ref": "c-p-decembre",
+  "why": "30 minutes d'IA évitent que la page mente en décembre."
+ },
+ "chain": [
+  {
+   "label": "PDF de la Ville",
+   "state": "fait",
+   "sub": "Saint-Gabriel 2026",
+   "note": ""
+  },
+  {
+   "label": "93 dates",
+   "state": "fait",
+   "sub": "transcrites",
+   "note": ""
+  },
+  {
+   "label": "Bac de ce soir",
+   "state": "fait",
+   "sub": "lisible à bout de bras",
+   "note": ""
+  },
+  {
+   "label": "Avertissement de fin d'année",
+   "state": "manquant",
+   "sub": "muet du 22 au 31 déc.",
+   "note": ""
+  },
+  {
+   "label": "Calendrier 2027",
+   "state": "ensuite",
+   "sub": "dès publication",
+   "note": ""
+  },
+  {
+   "label": "Rappel la veille",
+   "state": "ensuite",
+   "sub": "dans le calendrier du téléphone",
+   "note": ""
+  }
+ ],
+ "evolutions": [
+  {
+   "id": "ce-annee",
+   "title": "Passer l'année sans mentir",
+   "pitch": "Année juste, avertissement dès le 1er décembre, erreur visible.",
+   "goal": "Ne jamais afficher une information fausse",
+   "benefit": "fiabilite",
+   "value": 3,
+   "sessions": 0.5,
+   "horizon": "Maintenant",
+   "first_step": "Lancer le lot « Préparer la fin d'année ».",
+   "objective": "O1",
+   "depends": [],
+   "source": "repo",
+   "mode": "ia",
+   "why": "Sinon la page ment en décembre.",
+   "implies": "Une requête à l'IA, 30 minutes."
+  },
+  {
+   "id": "ce-rappel",
+   "title": "Le rappel vient à toi",
+   "pitch": "Ton téléphone te rappelle la veille à 19 h quel bac sortir, page fermée.",
+   "goal": "Ne plus avoir à y penser",
+   "benefit": "experience",
+   "value": 3,
+   "sessions": 2,
+   "horizon": "Ensuite",
+   "first_step": "Décider si tu veux un rappel (1 min).",
+   "objective": "O2",
+   "depends": [
+    "ce-annee"
+   ],
+   "source": "repo",
+   "mode": "mixte",
+   "why": "Le vrai problème est d'oublier le bac, pas de lire la page.",
+   "implies": "Une réponse de ta part ; l'IA génère un calendrier auquel t'abonner."
+  },
+  {
+   "id": "ce-chalet",
+   "title": "Dans la vue « fin de semaine au chalet »",
+   "pitch": "Le bac s'affiche avec le vent et la recharge, au même endroit.",
+   "goal": "Moins de charge mentale au chalet",
+   "benefit": "experience",
+   "value": 1,
+   "sessions": 1,
+   "horizon": "Plus tard",
+   "first_step": "Dépend de l'évolution commune avec Vent Lac et Recharge.",
+   "objective": null,
+   "depends": [],
+   "source": "Claude",
+   "mode": "ia",
+   "why": "Même idée que la vue « fin de semaine au chalet ».",
+   "implies": "Dépend de cette évolution commune."
+  }
+ ],
+ "plan": {
+  "version": 4,
+  "updated_at": "2026-09-28T01:00",
+  "updated_by": "Claude",
+  "priorities_validated": false,
+  "changes": [
+   {
+    "version": 3,
+    "date": "2026-09-27",
+    "summary": "Analyse produit refaite : cap, objectifs sur mesure, décisions, lots d'une heure, idées triées."
+   },
+   {
+    "version": 4,
+    "date": "2026-09-28",
+    "summary": "Chaîne de valeur et évolutions majeures en séquence (maintenant, ensuite, plus tard)."
+   }
+  ]
+ },
+ "history": [
+  {
+   "date": "2026-07-31",
+   "title": "Ne plus afficher une collecte le jour meme",
+   "pr": null
+  },
+  {
+   "date": "2026-07-29",
+   "title": "Les ordures vont au bac vert, pas au bac noir",
+   "pr": null
+  },
+  {
+   "date": "2026-07-26",
+   "title": "Ajouter l'icone d'ecran d'accueil (trois bandes)",
+   "pr": null
+  },
+  {
+   "date": "2026-07-26",
+   "title": "Re-rendre sans reseau au retour au premier plan",
+   "pr": null
+  },
+  {
+   "date": "2026-07-26",
+   "title": "Ajouter .nojekyll et declencher le build Pages",
+   "pr": null
+  },
+  {
+   "date": "2026-07-25",
+   "title": "Calendrier des collectes 2026 - Ville de Saint-Gabriel",
+   "pr": null
+  }
+ ],
+ "git": {
+  "_generated": "AUTO — généré par tools/git_facts.py (future Action). Ne pas éditer à la main.",
+  "generated_at": "2026-09-27",
+  "last_commit": {
+   "sha": "26a1265",
+   "date": "2026-09-05",
+   "author": "molivierbergeron",
+   "subject": "Mesure d'audience GoatCounter"
+  },
+  "last_human_commit": {
+   "sha": "26a1265",
+   "date": "2026-09-05",
+   "subject": "Mesure d'audience GoatCounter"
+  },
+  "commits_30d": 1,
+  "human_commits_30d": 1,
+  "auto_commits_30d": 0,
+  "active_days_30d": 1,
+  "human_commits_per_week_8w": [
+   0,
+   0,
+   0,
+   0,
+   1,
+   0,
+   0,
+   0
+  ],
+  "workflows": []
+ }
+}
