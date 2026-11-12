@@ -10,17 +10,23 @@
   "verdict": "Entretenir avant décembre",
   "why": "Le produit fait une seule chose et la fait bien. Son seul vrai risque : le calendrier s'arrête le 21 décembre et la page ne prévient pas."
  },
- "doing": "Rien en cours. Trois petites corrections sont à faire avant le 1er décembre.",
- "headline": "Fonctionne. Le calendrier 2026 s'arrête le 21 décembre ; sans correction, la page affichera « aucune collecte » sans prévenir, puis une date de 2026 en janvier.",
+ "doing": "Maison : installer le widget sur l'iPhone (5 minutes). Chalet : trois petites corrections à faire avant le 1er décembre.",
+ "headline": "Chalet : fonctionne, mais le calendrier 2026 s'arrête le 21 décembre et doit être prolongé avant le 1er décembre. Maison (Villeray) : widget iPhone et rappel du mercredi 19 h prêts à installer.",
  "resume": [
   "Une page, aucun serveur : rien ne tourne en arrière-plan.",
   "Les dates viennent du PDF de la Ville de Saint-Gabriel (ville.stgabriel.qc.ca).",
-  "Chaque décembre : donner le nouveau PDF à l'IA, qui entre les dates en 15 minutes."
+  "Chaque décembre : donner le nouveau PDF à l'IA, qui entre les dates en 15 minutes.",
+  "Maison (Villeray) : un widget iPhone s'allume la semaine des ordures et un rappel arrive le mercredi à 19 h, sans serveur."
  ],
  "links": [
   {
    "label": "Ouvrir Quel bac ?",
    "url": "https://molivierbergeron.github.io/Collecte-chalet/",
+   "kind": "app"
+  },
+  {
+   "label": "Installer le widget Ordures maison",
+   "url": "https://claude.ai/artifact/Hr6ZJBEo7UPZG524M275s5",
    "kind": "app"
   },
   {
@@ -188,6 +194,36 @@
        "phase": "maturite",
        "effort": "M",
        "blocked_by": "dec:c-rappel"
+      }
+     ]
+    },
+    {
+     "id": "O2.S2",
+     "title": "Maison (Villeray) : savoir sans ouvrir",
+     "why": "Les ordures passent aux deux semaines ; un signal sur l'écran verrouillé évite de se poser la question.",
+     "state": "active",
+     "initiatives": [
+      {
+       "id": "m-widget",
+       "title": "Widget iPhone « semaine des ordures » et rappel mercredi 19 h",
+       "status": "fait",
+       "owner": "ia",
+       "benefit": "experience",
+       "phase": "lancement",
+       "effort": "S",
+       "done_on": "2026-11-12",
+       "result": "Le widget s'allume du vendredi au jeudi midi avant chaque collecte, et une notification arrive la veille à 19 h."
+      },
+      {
+       "id": "m-installer",
+       "title": "Installer le widget sur l'iPhone",
+       "status": "à faire",
+       "owner": "toi",
+       "benefit": "experience",
+       "phase": "lancement",
+       "effort": "XS",
+       "minutes": 5,
+       "detail": "Suivre la page « Ordures maison »."
       }
      ]
     }
@@ -372,8 +408,8 @@
   }
  ],
  "plan": {
-  "version": 4,
-  "updated_at": "2026-09-28T01:00",
+  "version": 5,
+  "updated_at": "2026-11-11T22:12",
   "updated_by": "Claude",
   "priorities_validated": false,
   "changes": [
@@ -386,37 +422,57 @@
     "version": 4,
     "date": "2026-09-28",
     "summary": "Chaîne de valeur et évolutions majeures en séquence (maintenant, ensuite, plus tard)."
+   },
+   {
+    "version": 5,
+    "date": "2026-11-11",
+    "summary": "Ajout du volet maison (Villeray) : widget iPhone de la semaine des ordures et rappel du mercredi 19 h."
    }
   ]
  },
  "history": [
   {
-   "date": "2026-07-31",
+   "date": "2026-11-11",
+   "title": "Widget iPhone et rappel des ordures pour la maison (Villeray)",
+   "pr": null
+  },
+  {
+   "date": "Sun Sep 27 23:11:22 2026 -0400",
+   "title": "Brancher le tableau de bord Umbrella",
+   "pr": 2
+  },
+  {
+   "date": "Sat Sep 5 17:10:48 2026 -0400",
+   "title": "Mesure d'audience GoatCounter",
+   "pr": null
+  },
+  {
+   "date": "Fri Jul 31 16:48:55 2026 +0000",
    "title": "Ne plus afficher une collecte le jour meme",
    "pr": null
   },
   {
-   "date": "2026-07-29",
+   "date": "Wed Jul 29 01:22:50 2026 +0000",
    "title": "Les ordures vont au bac vert, pas au bac noir",
    "pr": null
   },
   {
-   "date": "2026-07-26",
+   "date": "Sun Jul 26 01:02:02 2026 +0000",
    "title": "Ajouter l'icone d'ecran d'accueil (trois bandes)",
    "pr": null
   },
   {
-   "date": "2026-07-26",
+   "date": "Sun Jul 26 00:58:29 2026 +0000",
    "title": "Re-rendre sans reseau au retour au premier plan",
    "pr": null
   },
   {
-   "date": "2026-07-26",
+   "date": "Sun Jul 26 00:48:54 2026 +0000",
    "title": "Ajouter .nojekyll et declencher le build Pages",
    "pr": null
   },
   {
-   "date": "2026-07-25",
+   "date": "Sat Jul 25 23:14:39 2026 +0000",
    "title": "Calendrier des collectes 2026 - Ville de Saint-Gabriel",
    "pr": null
   }
@@ -431,9 +487,9 @@
    "subject": "Mesure d'audience GoatCounter"
   },
   "last_human_commit": {
-   "sha": "26a1265",
-   "date": "2026-09-05",
-   "subject": "Mesure d'audience GoatCounter"
+   "sha": "2aaa172",
+   "date": "2026-09-27",
+   "subject": "Brancher le tableau de bord Umbrella (#2)"
   },
   "commits_30d": 1,
   "human_commits_30d": 1,
